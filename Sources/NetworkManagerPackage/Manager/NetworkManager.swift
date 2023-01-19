@@ -15,7 +15,7 @@ public struct NetworkManager: INetworkManager {
       self.options = options
    }
 
-   func send<T>(
+ public func send<T>(
       _ path: String,
       parseModel: T.Type,
       requestType: RequestType,
