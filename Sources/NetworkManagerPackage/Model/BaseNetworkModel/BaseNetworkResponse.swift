@@ -8,6 +8,6 @@
 import Foundation
 
 public struct BaseNetworkResponse<T: Codable> {
-   let response: URLResponse?
-   let data: T?
+   public let response: URLResponse?
+   public let data: T?
 }
