@@ -11,6 +11,10 @@ import Foundation
 public struct NetworkManager: INetworkManager {
    var options: NetworkingOption
 
+   public init(options: NetworkingOption) {
+      self.options = options
+   }
+
    func send<T>(
       _ path: String,
       parseModel: T.Type,
