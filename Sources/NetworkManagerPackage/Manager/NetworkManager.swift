@@ -19,7 +19,7 @@ public struct NetworkManager: INetworkManager {
       _ path: String,
       parseModel: T.Type,
       requestType: RequestType,
-      body: [String: String]? = nil,
+      body: [String: Any]? = nil,
       bodyType: BodyType = .JSON,
       queryParameters: [String: String]? = nil
    ) async -> BaseNetworkResponse<T> where T: Decodable, T: Encodable {
