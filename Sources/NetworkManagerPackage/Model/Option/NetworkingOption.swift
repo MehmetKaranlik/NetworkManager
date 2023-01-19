@@ -12,6 +12,16 @@ public struct NetworkingOption {
    let baseUrl : String
    let headers : [String : String]? = NetworkAlternativeConstants.defaultHeader
    // Experimental
-   let onRefresh : (() -> ())?
-   let onRefreshFail : (() -> ())?
+   var onRefresh : (() -> ())?=nil
+   var onRefreshFail : (() -> ())?=nil
+
+
+   public init(
+      baseUrl: String, onRefresh: ( () -> Void)?,
+      onRefreshFail: ( () -> Void)?
+   ) {
+      self.baseUrl = baseUrl
+      self.onRefresh = onRefresh
+      self.onRefreshFail = onRefreshFail
+   }
 }
