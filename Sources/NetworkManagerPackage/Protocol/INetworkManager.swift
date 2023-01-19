@@ -10,11 +10,8 @@ import Foundation
 import Foundation
 
 
-
-
-
-protocol INetworkManagerAlternative {
-   var options: NetworkingOptionAlternative { get set }
+protocol INetworkManager {
+   var options: NetworkingOption { get set }
    
    func send<T: Codable>(
       _ path: String,
@@ -32,7 +29,7 @@ protocol INetworkManagerAlternative {
    func decodeData<T: Codable>(data: Data, parseModel: T.Type) -> T?
 }
 
-extension INetworkManagerAlternative {
+extension INetworkManager {
    func headerGenerator(request: inout URLRequest) {
       request.allHTTPHeaderFields = self.options.headers
    }

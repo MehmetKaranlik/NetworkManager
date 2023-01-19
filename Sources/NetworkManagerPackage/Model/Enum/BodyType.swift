@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum BodyType {
+public enum BodyType {
    case JSON
    case MULTIFORM
 }

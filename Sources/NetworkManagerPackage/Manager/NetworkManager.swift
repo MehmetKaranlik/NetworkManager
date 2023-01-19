@@ -7,9 +7,9 @@
 
 import Foundation
 
-// TODO: Hata constantları yazılır yönetilecek.
-struct NetworkManagerAlternative: INetworkManagerAlternative {
-   var options: NetworkingOptionAlternative
+
+public struct NetworkManager: INetworkManager {
+   var options: NetworkingOption
 
    func send<T>(
       _ path: String,

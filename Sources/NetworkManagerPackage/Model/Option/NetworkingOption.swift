@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct NetworkingOptionAlternative {
+public struct NetworkingOption {
    let baseUrl : String
    let headers : [String : String]? = NetworkAlternativeConstants.defaultHeader
    // Experimental
