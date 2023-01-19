@@ -8,6 +8,7 @@
 import Foundation
 
 
+/// Networking Options defines baseUrl and such constant values
 public struct NetworkingOption {
    let baseUrl : String
    let headers : [String : String]? = NetworkAlternativeConstants.defaultHeader

@@ -9,6 +9,7 @@ import Foundation
 
 
 struct NetworkAlternativeConstants {
+   /// Default URLRequest Header that implements Content-Type : JSON and Accept : JSON
    static let defaultHeader : [String: String] =  [
       ContentTypeAlternative.json.toContentType().0 : ContentTypeAlternative.json.toContentType().1,
       AcceptTypeAlternative.json.toAcceptType().0 : AcceptTypeAlternative.json.toAcceptType().1

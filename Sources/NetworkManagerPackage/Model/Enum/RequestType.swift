@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+/// Recognized HTTP Request types if not Provided Default value is GET
 public enum RequestType: String {
    case GET
    case POST

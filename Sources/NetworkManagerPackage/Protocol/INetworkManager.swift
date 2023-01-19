@@ -9,7 +9,7 @@ import Foundation
 
 import Foundation
 
-
+/// Single handed manager protocol for network requests 
 protocol INetworkManager {
    var options: NetworkingOption { get set }
    
@@ -21,15 +21,22 @@ protocol INetworkManager {
       bodyType: BodyType,
       queryParameters: [String: String]?
    ) async -> BaseNetworkResponse<T>
-
+   /// Creates request headers from options if not provided it uses default headers
    func headerGenerator(request: inout URLRequest)
+   /// Json parses the body if provided if not it returns in the first line
    func bodyGenerator(request: inout URLRequest, body: [String: Any?]?, bodyType:  BodyType)
+   /// Appends query to URL if provided. If its nil it returns in the first line
    func queryGenerator(requestURL: inout URL, queryParameters: [String: String?]?)
+   ///  Manages actual network call on internet returns Data and URLResponse
    func handleRequest(request: URLRequest) async -> (Data?, URLResponse?)
+   ///  Handles decoding data returned handleRequest function
    func decodeData<T: Codable>(data: Data, parseModel: T.Type) -> T?
 }
 
+
+// Overriding implementations
 extension INetworkManager {
+
    func headerGenerator(request: inout URLRequest) {
       request.allHTTPHeaderFields = self.options.headers
    }

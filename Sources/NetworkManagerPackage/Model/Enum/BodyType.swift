@@ -8,6 +8,7 @@
 import Foundation
 
 
+/// Body type iteration of Requests default to JSON in implementation
 public enum BodyType {
    case JSON
    case MULTIFORM
