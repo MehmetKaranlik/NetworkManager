@@ -1,6 +1,6 @@
 # NetworkManagerPackage
 
-Easy to use and integrate Swift 5 networking package 
+Easy to use and integrate Swift 5 networking package (EARLY IN DEVELOPMENT)
 
 
 
@@ -61,3 +61,10 @@ public func exampleGet() async {
 
 
 ```
+
+**Remaining Features to Implement**
+
+- Custom logger for debugging
+- Retry on failed requests
+- Error model casting
+
