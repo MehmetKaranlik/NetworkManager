@@ -67,4 +67,6 @@ public func exampleGet() async {
 - Custom logger for debugging
 - Retry on failed requests
 - Error model casting
+- Convert body to Any? and convert to data if it conforms encodable
+- Intercepter logic 
 
