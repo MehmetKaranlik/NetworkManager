@@ -64,9 +64,4 @@ public func exampleGet() async {
 
 **Remaining Features to Implement**
 
-- Custom logger for debugging
-- Retry on failed requests
-- Error model casting
-- Convert body to Any? and convert to data if it conforms encodable
-- Intercepter logic 
-
+https://github.com/MehmetKaranlik/NetworkManager/issues
