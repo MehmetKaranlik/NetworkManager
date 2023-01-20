@@ -38,7 +38,7 @@ public struct NetworkManager: INetworkManager {
       let (data, response): (Data?, URLResponse?) = await handleRequest(request: request)
 
       guard let data else { print("Result : Data bos"); return BaseNetworkResponse<T>(response: nil, data: nil) }
-
+      Logger.shared.logResponse(data,response)
       let decodedData = decodeData(data: data, parseModel: parseModel.self)
 
       return BaseNetworkResponse<T>(response: response, data: decodedData)

@@ -79,7 +79,7 @@ extension INetworkManager {
    private func parseJsonBody( body: [String: Any?]?) -> Data? {
       guard let body else { return nil }
       do {
-        let data =  try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+         let data =  try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
         return data
       }catch let e {
          print("⚠️", "Something went wrong with JSON Parsing Body : \(e)")
