@@ -17,14 +17,14 @@ protocol INetworkManager {
       _ path: String,
       parseModel: T.Type,
       requestType: RequestType,
-      body: [String: Any]?,
+      body: (any Encodable)?,
       bodyType: BodyType,
       queryParameters: [String: String]?
    ) async -> BaseNetworkResponse<T>
    /// Creates request headers from options if not provided it uses default headers
    func headerGenerator(request: inout URLRequest)
    /// Json parses the body if provided if not it returns in the first line
-   func bodyGenerator(request: inout URLRequest, body: [String: Any?]?, bodyType:  BodyType)
+   func bodyGenerator(request: inout URLRequest, body: (any Encodable)?, bodyType:  BodyType)
    /// Appends query to URL if provided. If its nil it returns in the first line
    func queryGenerator(requestURL: inout URL, queryParameters: [String: String?]?)
    ///  Manages actual network call on internet returns Data and URLResponse
@@ -41,7 +41,7 @@ extension INetworkManager {
       request.allHTTPHeaderFields = self.options.headers
    }
 
-   func bodyGenerator(request: inout URLRequest, body: [String: Any?]?, bodyType:  BodyType) {
+   func bodyGenerator(request: inout URLRequest, body: (any Encodable)?, bodyType:  BodyType) {
       guard body != nil else { return }
       if bodyType == .JSON {
          let data = parseJsonBody(body: body)
@@ -76,13 +76,18 @@ extension INetworkManager {
    }
 
 
-   private func parseJsonBody( body: [String: Any?]?) -> Data? {
+   private func parseJsonBody( body: (any Encodable)?) -> Data? {
       guard let body else { return nil }
+      let jsonData = converEncodableToJson(body)
+      return jsonData
+   }
+
+   private func converEncodableToJson(_ encodable : Encodable) -> Data? {
       do {
-         let data =  try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
-        return data
-      }catch let e {
-         print("⚠️", "Something went wrong with JSON Parsing Body : \(e)")
+         let json = try JSONEncoder().encode(encodable)
+         return json
+      } catch let e {
+         print("⚠️", "Something went wrong with converting body to json : \(e)")
          return nil
       }
    }

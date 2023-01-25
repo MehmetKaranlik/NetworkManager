@@ -15,14 +15,17 @@ public struct NetworkingOption {
    // Experimental
    var onRefresh : (() -> ())?=nil
    var onRefreshFail : (() -> ())?=nil
+   var enableLogger : Bool
 
 
    public init(
       baseUrl: String, onRefresh: ( () -> Void)?,
-      onRefreshFail: ( () -> Void)?
+      onRefreshFail: ( () -> Void)?,
+      enableLogger : Bool = false
    ) {
       self.baseUrl = baseUrl
       self.onRefresh = onRefresh
       self.onRefreshFail = onRefreshFail
+      self.enableLogger = enableLogger
    }
 }

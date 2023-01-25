@@ -7,13 +7,25 @@
 
 import Foundation
 
+enum LoggerTitles: String {
+   case url = "url"
+   case statusCode = "status code"
+   case headers = "headers"
+   case contentType = "content-type"
+   case body = "body"
+   case method = "method"
+}
+
+
 struct Logger {
    static let shared: Logger = .init()
+
+   let seperator: String = .init(repeating: "-", count: 20)
 
    func logResponse(_ data: Data?, _ baseResponse: URLResponse?) {
       if !isDebug { return }
       guard let httpResponse = baseResponse as? HTTPURLResponse else { return }
-      printSeparator(httpResponse.statusCode)
+      printResponseSeparator(httpResponse.statusCode)
       var statusCode = httpResponse.statusCode.description
       var headers = httpResponse.allHeaderFields.description
       var mimeType = httpResponse.mimeType?.description
@@ -23,8 +35,61 @@ struct Logger {
       logKeyValue(key: LoggerTitles.headers.rawValue, value: headers.clear())
       logKeyValue(key: LoggerTitles.contentType.rawValue, value: mimeType?.clear() ?? "")
       logBody(data)
-      printSeparator(httpResponse.statusCode)
+      printResponseSeparator(httpResponse.statusCode)
    }
+
+
+
+
+   func logRequest(_ request : URLRequest) {
+      if !isDebug { return }
+      printRequestSeperator()
+      if let url = request.url {
+         logKeyValue(key: LoggerTitles.url.rawValue, value: url.description)
+      }
+      if let method = request.httpMethod {
+         logKeyValue(key: LoggerTitles.method.rawValue, value: method)
+      }
+
+      if let body = request.httpBody {
+         logBody(body)
+      }
+
+      printRequestSeperator()
+   }
+
+
+
+
+
+
+
+
+}
+
+
+extension Logger {
+
+   var isDebug: Bool {
+      #if DEBUG
+         return true
+      #else
+         return false
+      #endif
+      }
+
+   func printResponseSeparator(_ statusCode: Int) {
+      if statusCode >= 200, statusCode < 300 {
+         print("🍏" + seperator + "🍏")
+      } else {
+         print("🍎" + seperator + "🍎")
+      }
+   }
+
+   func printRequestSeperator() {
+      print("🟨" + seperator + "🟨"+"\n")
+   }
+
 
    private func logKeyValue(key: String, value: String) {
       print("\(key.uppercased()) : \(value) \n")
@@ -40,23 +105,6 @@ struct Logger {
       print("\(key.uppercased()) : \(value) \n")
    }
 
-   let seperator: String = .init(repeating: "-", count: 20)
-
-   func printSeparator(_ statusCode: Int) {
-      if statusCode >= 200, statusCode < 300 {
-         print("🍏" + seperator + "🍏")
-      } else {
-         print("🍎" + seperator + "🍎")
-      }
-   }
-
-   var isDebug: Bool {
-      #if DEBUG
-      return true
-      #else
-      return false
-      #endif
-   }
 }
 
 private extension String {
@@ -80,10 +128,3 @@ extension Data {
    }
 }
 
-enum LoggerTitles: String {
-   case url = "url"
-   case statusCode = "status code"
-   case headers = "headers"
-   case contentType = "content-type"
-   case body = "body"
-}
