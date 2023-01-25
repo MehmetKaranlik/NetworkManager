@@ -9,33 +9,40 @@ Easy to use and integrate Swift 5 networking package
 
 ```swift 
 
- var manager : NetworkManager = NetworkManager(
+ struct Service {
+   var manager : NetworkManager = NetworkManager(
       options: NetworkingOption(
          baseUrl: "https://reqres.in",
-         onRefresh: {}, onRefreshFail: {})
-)
-
+         onRefresh: {}, onRefreshFail: {},
+         enableLogger: true
+         )
+   )
 
 public func exampleGet() async {
     let response = await manager.send(
          "/api/users/2",
          parseModel: GetModel.self,
-         requestType: .GET
+         requestType: .GET,
+         body: nil
       )
-   print(response)
+
    }
+
+
+// Supports passing custom type to body as long as it conforms Encodable
 
    public func examplePost() async {
       let response = await manager.send(
          "/api/users",
            parseModel: PostModel.self,
          requestType: .POST,
-         body: [
-            "name": "morpheus",
-             "job": "leader"]
+         body: PostRequestModel(name: "morpheus", job: "leader")
+
       )
-      print(response)
+
    }
+
+  
 
    public func examplePut() async {
       let response = await manager.send(
@@ -47,17 +54,18 @@ public func exampleGet() async {
             "job": "zion resident"
          ]
       )
-      print(response)
+
    }
 
    public func exampleDelete() async {
       let response = await manager.send(
          "/api/users/2",
          parseModel: PutModel.self,
-         requestType: .DELETE
+         requestType: .DELETE,
+         body: nil
       )
-      print(response)
+ 
    }
-
+}
 
 ```

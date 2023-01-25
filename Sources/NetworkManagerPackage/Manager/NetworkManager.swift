@@ -19,10 +19,10 @@ public struct NetworkManager: INetworkManager {
       _ path: String,
       parseModel: T.Type,
       requestType: RequestType,
-      body: [String: Any]? = nil,
+      body: (any Encodable)? = nil,
       bodyType: BodyType = .JSON,
       queryParameters: [String: String]? = nil
-   ) async -> BaseNetworkResponse<T> where T: Decodable, T: Encodable {
+ ) async -> BaseNetworkResponse<T> where T: Codable {
       guard var url = URL(string: options.baseUrl + path) else { return BaseNetworkResponse<T>(response: nil, data: nil) }
 
       var request = URLRequest(url: url)
@@ -35,10 +35,18 @@ public struct NetworkManager: INetworkManager {
 
       bodyGenerator(request: &request, body: body, bodyType: bodyType)
 
+     if options.enableLogger {
+       Logger.shared.logRequest(request)
+      }
+
       let (data, response): (Data?, URLResponse?) = await handleRequest(request: request)
 
       guard let data else { print("Result : Data bos"); return BaseNetworkResponse<T>(response: nil, data: nil) }
-      Logger.shared.logResponse(data,response)
+
+      if options.enableLogger  {
+         Logger.shared.logResponse(data,response)
+      }
+      
       let decodedData = decodeData(data: data, parseModel: parseModel.self)
 
       return BaseNetworkResponse<T>(response: response, data: decodedData)
