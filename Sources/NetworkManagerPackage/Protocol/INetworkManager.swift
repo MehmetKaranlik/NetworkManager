@@ -11,8 +11,8 @@ import Foundation
 
 /// Single handed manager protocol for network requests 
 protocol INetworkManager {
-   var options: NetworkingOption { get set }
-   
+   associatedtype Z : Codable
+   var options: NetworkingOption<Z> { get set }
    func send<T: Codable>(
       _ path: String,
       parseModel: T.Type,
@@ -20,7 +20,7 @@ protocol INetworkManager {
       body: (any Encodable)?,
       bodyType: BodyType,
       queryParameters: [String: String]?
-   ) async -> BaseNetworkResponse<T>
+   ) async -> BaseNetworkResponse<T,Z>
    /// Creates request headers from options if not provided it uses default headers
    func headerGenerator(request: inout URLRequest)
    /// Json parses the body if provided if not it returns in the first line
@@ -30,7 +30,9 @@ protocol INetworkManager {
    ///  Manages actual network call on internet returns Data and URLResponse
    func handleRequest(request: URLRequest) async -> (Data?, URLResponse?)
    ///  Handles decoding data returned handleRequest function
-   func decodeData<T: Codable>(data: Data, parseModel: T.Type) -> T?
+   func decodeData<T: Codable,Z:Codable>(
+      data: Data, parseModel: T.Type, errorModel : Z.Type, isError: Bool
+   ) -> (T?,Z?)
 }
 
 
@@ -51,7 +53,12 @@ extension INetworkManager {
 
    func queryGenerator(requestURL: inout URL, queryParameters: [String: String?]?) {
       guard queryParameters != nil else { return }
-      queryParameters!.forEach { requestURL.appendQueryItem(name: $0, value: $1.debugDescription)}
+      queryParameters!.forEach {
+         requestURL.appendQueryItem(
+            name: $0, value: $1.debugDescription
+         )
+
+      }
 
    }
 
@@ -65,13 +72,18 @@ extension INetworkManager {
       }
    }
 
-   func decodeData<T: Codable>(data: Data, parseModel: T.Type) -> T? {
+   func decodeData<T: Codable,Z:Codable>(data: Data, parseModel: T.Type, errorModel : Z.Type, isError: Bool = false) -> (T?,Z?) {
       do {
+         if isError {
+            let data = try JSONDecoder().decode( Z.self , from: data)
+            return (nil,data)
+         }
          let data = try JSONDecoder().decode(T.self, from: data)
-         return data
+         return (data,nil)
       } catch let e {
          print("⚠️", "Something went wrong with JSON Parsing : \(e)")
-         return nil
+         return (nil,nil)
+         
       }
    }
 

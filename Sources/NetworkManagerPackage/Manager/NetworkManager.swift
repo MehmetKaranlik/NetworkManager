@@ -7,23 +7,25 @@
 
 import Foundation
 
+public struct NetworkManager<Z: Codable>: INetworkManager {
+   var options: NetworkingOption<Z>
 
-public struct NetworkManager: INetworkManager {
-   var options: NetworkingOption
-
-   public init(options: NetworkingOption) {
+   public init(options: NetworkingOption<Z>) {
       self.options = options
    }
 
- public func send<T>(
+   public func send<T>(
       _ path: String,
       parseModel: T.Type,
       requestType: RequestType,
       body: (any Encodable)? = nil,
       bodyType: BodyType = .JSON,
       queryParameters: [String: String]? = nil
- ) async -> BaseNetworkResponse<T> where T: Codable {
-      guard var url = URL(string: options.baseUrl + path) else { return BaseNetworkResponse<T>(response: nil, data: nil) }
+   ) async -> BaseNetworkResponse<T, Z> where T: Codable, Z: Codable {
+      guard var url = URL(string: options.baseUrl + path) else {
+
+         return BaseNetworkResponse<T, Z>(response: nil, data: nil, error: nil)
+      }
 
       var request = URLRequest(url: url)
 
@@ -35,20 +37,20 @@ public struct NetworkManager: INetworkManager {
 
       bodyGenerator(request: &request, body: body, bodyType: bodyType)
 
-     if options.enableLogger {
-       Logger.shared.logRequest(request)
+      if options.enableLogger {
+         Logger.shared.logRequest(request)
       }
 
       let (data, response): (Data?, URLResponse?) = await handleRequest(request: request)
 
-      guard let data else { print("Result : Data bos"); return BaseNetworkResponse<T>(response: nil, data: nil) }
+      guard let data else { return BaseNetworkResponse<T, Z>(response: nil, data: nil, error: nil) }
 
-      if options.enableLogger  {
-         Logger.shared.logResponse(data,response)
+      if options.enableLogger {
+         Logger.shared.logResponse(data, response)
       }
-      
-      let decodedData = decodeData(data: data, parseModel: parseModel.self)
 
-      return BaseNetworkResponse<T>(response: response, data: decodedData)
+      let decodedData = decodeData(data: data, parseModel: parseModel.self, errorModel: options.errorModel.self!)
+
+      return BaseNetworkResponse<T, Z>(response: response, data: decodedData.0, error: decodedData.1)
    }
 }
