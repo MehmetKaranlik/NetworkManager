@@ -23,7 +23,6 @@ public struct NetworkManager<Z: Codable>: INetworkManager {
       queryParameters: [String: String]? = nil
    ) async -> BaseNetworkResponse<T, Z> where T: Codable, Z: Codable {
       guard var url = URL(string: options.baseUrl + path) else {
-
          return BaseNetworkResponse<T, Z>(response: nil, data: nil, error: nil)
       }
 
