@@ -27,7 +27,7 @@ public struct NetworkManager<Z: Codable>: INetworkManager {
       }
 
       var request = URLRequest(url: url)
-
+      
       request.httpMethod = requestType.rawValue
 
       queryGenerator(requestURL: &url, queryParameters: queryParameters)

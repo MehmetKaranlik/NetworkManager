@@ -10,7 +10,7 @@ import Foundation
 import Foundation
 
 /// Single handed manager protocol for network requests
-protocol INetworkManager {
+public protocol INetworkManager {
    associatedtype Z: Codable
    /// Networking options variable that holds configuration for defined network manager
    var options: NetworkingOption<Z> { get set }
