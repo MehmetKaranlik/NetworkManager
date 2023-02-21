@@ -47,7 +47,7 @@ public protocol INetworkManager {
 }
 
 // Overriding implementations
-extension INetworkManager {
+public extension INetworkManager {
    func headerGenerator(request: inout URLRequest) {
       request.allHTTPHeaderFields = options.headers
    }
@@ -83,11 +83,9 @@ extension INetworkManager {
       data: Data, parseModel: T.Type,
       errorModel: Z.Type, isError: Bool = false
    ) -> (T?, Z?) {
-
       var error: Z?; var resultData: T?
 
       do {
-
          if isError {
             error = try JSONDecoder().decode(errorModel.self, from: data)
          } else {
@@ -101,13 +99,13 @@ extension INetworkManager {
       }
    }
 
-   private func parseJsonBody(body: (any Encodable)?) -> Data? {
+   func parseJsonBody(body: (any Encodable)?) -> Data? {
       guard let body else { return nil }
       let jsonData = converEncodableToJson(body)
       return jsonData
    }
 
-   private func converEncodableToJson(_ encodable: Encodable) -> Data? {
+   func converEncodableToJson(_ encodable: Encodable) -> Data? {
       do {
          let json = try JSONEncoder().encode(encodable)
          return json

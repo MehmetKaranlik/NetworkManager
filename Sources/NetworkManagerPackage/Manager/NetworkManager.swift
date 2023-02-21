@@ -8,7 +8,7 @@
 import Foundation
 
 public struct NetworkManager<Z: Codable>: INetworkManager {
-   var options: NetworkingOption<Z>
+   public var options: NetworkingOption<Z>
 
    public init(options: NetworkingOption<Z>) {
       self.options = options
@@ -29,6 +29,8 @@ public struct NetworkManager<Z: Codable>: INetworkManager {
       var request = URLRequest(url: url)
       
       request.httpMethod = requestType.rawValue
+
+      request.timeoutInterval = options.timeoutDuration!
 
       queryGenerator(requestURL: &url, queryParameters: queryParameters)
 
