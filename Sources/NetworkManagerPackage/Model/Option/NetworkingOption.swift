@@ -8,10 +8,11 @@
 import Foundation
 
 
+@available(iOS 14.0,*)
 /// Networking Options defines baseUrl and such constant values
 public struct NetworkingOption<T: Codable> {
    let baseUrl : String
-   let headers : [String : String]? = NetworkManagerConstants.defaultHeader
+   var headers : [String : String]? = NetworkManagerConstants.defaultHeader
    // Experimental
    var onRefresh : (() -> ())?=nil
    var onRefreshFail : (() -> ())?=nil
@@ -48,4 +49,16 @@ public struct NetworkingOption<T: Codable> {
       self.errorModel = nil
       self.timeoutDuration = timeoutDuration ?? NetworkManagerConstants.timeoutDuration
    }
+
+
+   mutating func addHeaders(_ key : String , _ value : String) {
+      headers?[key] = value
+   }
+
+
+   mutating func removeHeader( _ key : String) {
+      headers?.removeValue(forKey: key)
+   }
+
+   
 }

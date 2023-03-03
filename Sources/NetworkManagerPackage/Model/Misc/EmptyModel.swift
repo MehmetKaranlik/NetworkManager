@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 14.0,*)
 public struct EmptyModel : Codable {
    public init(){
       

@@ -7,7 +7,8 @@
 
 import Foundation
 
-/// Recognized HTTP Request types if not Provided Default value is GET
+/// Recognized HTTP Request types if not Provided Default value is
+@available(iOS 14.0,*)
 public enum RequestType: String {
    case GET
    case POST

@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+@available(iOS 14.0,*)
 extension URL {
    mutating func appendQueryItem(name: String, value: String?) {
 

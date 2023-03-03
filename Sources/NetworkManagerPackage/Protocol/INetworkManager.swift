@@ -9,6 +9,7 @@ import Foundation
 
 import Foundation
 
+@available(iOS 14.0,*)
 /// Single handed manager protocol for network requests
 public protocol INetworkManager {
    associatedtype Z: Codable
@@ -46,6 +47,7 @@ public protocol INetworkManager {
    ) -> (T?, Z?)
 }
 
+@available(iOS 14.0,*)
 // Overriding implementations
 public extension INetworkManager {
    func headerGenerator(request: inout URLRequest) {

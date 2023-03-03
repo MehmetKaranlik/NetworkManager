@@ -8,6 +8,8 @@
 import Foundation
 
 
+@available(iOS 14.0,*)
+
 /// Body type iteration of Requests default to JSON in implementation
 public enum BodyType {
    case JSON

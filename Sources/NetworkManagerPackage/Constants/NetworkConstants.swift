@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+@available(iOS 14.0,*)
 struct NetworkManagerConstants {
    /// Default URLRequest Header that implements Content-Type : JSON and Accept : JSON
    static let defaultHeader : [String: String] =  [

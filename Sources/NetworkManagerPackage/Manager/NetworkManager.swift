@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+@available(iOS 14.0,*)
 public struct NetworkManager<Z: Codable>: INetworkManager {
    public var options: NetworkingOption<Z>
 
